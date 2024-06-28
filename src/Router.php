@@ -3,7 +3,6 @@
 namespace Tigress;
 
 use JetBrains\PhpStorm\NoReturn;
-use Tigress\Core;
 
 /**
  * Class Router (PHP version 7.2)
@@ -55,7 +54,7 @@ class Router
     private string $default = '/';
 
     /**
-     * @var \Tigress\Core $Core
+     * @var Core $Core
      * Needed for injecting Tigress_Core into Framework
      */
     private Core $Core;
@@ -63,7 +62,7 @@ class Router
     /**
      * Router constructor.
      *
-     * @param \Tigress\Core $Core
+     * @param Core $Core
      */
     public function __construct(Core $Core)
     {
@@ -107,27 +106,34 @@ class Router
             $this->respondOnOptionsRequest(200);
         }
         $variables = [];
-        print('<pre>');
         foreach($this->routes as $route) {
             $testRoute = explode('/', $route->path);
+            $testRoute[0] = $route->request;
             if (!(count($this->parameters) == count($testRoute))) {
                 continue;
             }
-            print_r($testRoute);
             for ($x = 0; $x < count($testRoute); $x++) {
-                print($this->isItAVariable($testRoute[$x]) ? 'TRUE' : 'FALSE');
-                print(strtolower('TestRoute = ' . $testRoute[$x]) . '<br>');
-                print(strtolower('Parameters = ' . $this->parameters[$x]) . '<br>');
                 if ($this->isItAVariable($testRoute[$x])) {
                     $key = trim($testRoute[$x], '{}');
                     $variables[$key] = str_replace('__', '/', $this->parameters[$x]);
                 } elseif (strtolower($testRoute[$x]) != strtolower($this->parameters[$x])) {
-                    break 1;
+                    break 2;
                 }
             }
-            print_r($variables);
+            $variables['headers'] = apache_request_headers();
+            $loadController = '\\Controlers\\' . $route->controller;
+            if ($route->method !== null) {
+                $controller = new $loadController($this->Core);
+                $arguments[] = $variables;
+                $arguments[] = $this->body;
+                $controller->{$route->method}($arguments);
+            } else {
+                new $loadController($this->Core, $variables);
+            }
+            return;
         }
-        print('</pre>');
+        header('Location: ' . $this->default);
+        exit;
     }
 
     /**
