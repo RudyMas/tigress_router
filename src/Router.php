@@ -99,6 +99,11 @@ class Router
         $this->parameters = array_values($requestURI);
     }
 
+    /**
+     * Check the routes and execute the correct controller
+     *
+     * @return void
+     */
     private function execute(): void
     {
         $this->checkFunctions();
@@ -121,12 +126,12 @@ class Router
                 }
             }
             $variables['headers'] = apache_request_headers();
-            $loadController = '\\Controlers\\' . $route->controller;
+            $loadController = '\\Controlers\\' . $route->controller . 'Controller';
             if ($route->method !== null) {
                 $controller = new $loadController($this->Core);
                 $arguments[] = $variables;
                 $arguments[] = $this->body;
-                $controller->{$route->method}($arguments);
+                call_user_func_array([$controller, $route->method], $arguments);
             } else {
                 new $loadController($this->Core, $variables);
             }
