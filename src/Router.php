@@ -5,7 +5,7 @@ namespace Tigress;
 use JetBrains\PhpStorm\NoReturn;
 
 /**
- * Class Router (PHP version 7.2)
+ * Class Router (PHP version 8.3)
  * Build upon EasyRouter (rudymas/easyrouter)
  *
  * @author      Rudy Mas <rudy.mas@rudymas.be>
@@ -16,6 +16,18 @@ use JetBrains\PhpStorm\NoReturn;
  */
 class Router
 {
+    /**
+     * @var string $body
+     * This contains the body of the request
+     */
+    private string $body = '';
+
+    /**
+     * @var string $default
+     * The default route to be used
+     */
+    private string $default = '/';
+
     /**
      * @var array $parameters
      * This contains the URL stripped down to an array of parameters
@@ -31,12 +43,6 @@ class Router
     private array $parameters = [];
 
     /**
-     * @var string $body
-     * This contains the body of the request
-     */
-    private string $body = '';
-
-    /**
      * @var array $routes ;
      * This contains all the routes of the website
      * $routes[n]['request'] = the request method to check against
@@ -46,12 +52,6 @@ class Router
      * $routes[n]['args'] = stdClass of argument(s) which you pass to the controller
      */
     private array $routes = [];
-
-    /**
-     * @var string $default
-     * The default route to be used
-     */
-    private string $default = '/';
 
     /**
      * @var Core $Core
@@ -74,71 +74,6 @@ class Router
 
         $this->processURL();
         $this->execute();
-    }
-
-    /**
-     * function processURL()
-     * This will process the URL and extract the parameters from it.
-     */
-    private function processURL(): void
-    {
-        $defaultPath = '';
-        $basePath = explode('?', urldecode($_SERVER['REQUEST_URI']));
-        $requestURI = explode('/', rtrim($basePath[0], '/'));
-        $requestURI[0] = strtoupper($_SERVER['REQUEST_METHOD']);
-        $scriptName = explode('/', $_SERVER['SCRIPT_NAME']);
-        $sizeofRequestURI = sizeof($requestURI);
-        $sizeofScriptName = sizeof($scriptName);
-        for ($x = 0; $x < $sizeofRequestURI && $x < $sizeofScriptName; $x++) {
-            if (strtolower($requestURI[$x]) == strtolower($scriptName[$x])) {
-                $defaultPath .= '/' . $requestURI[$x];
-                unset($requestURI[$x]);
-            }
-        }
-        $this->default = $defaultPath . $this->default;
-        $this->parameters = array_values($requestURI);
-    }
-
-    /**
-     * Check the routes and execute the correct controller
-     *
-     * @return void
-     */
-    private function execute(): void
-    {
-        $this->checkFunctions();
-        if ($this->parameters[0] === 'OPTIONS') {
-            $this->respondOnOptionsRequest(200);
-        }
-        $variables = [];
-        foreach($this->routes as $route) {
-            $testRoute = explode('/', $route->path);
-            $testRoute[0] = $route->request;
-            if (!(count($this->parameters) == count($testRoute))) {
-                continue;
-            }
-            for ($x = 0; $x < count($testRoute); $x++) {
-                if ($this->isItAVariable($testRoute[$x])) {
-                    $key = trim($testRoute[$x], '{}');
-                    $variables[$key] = str_replace('__', '/', $this->parameters[$x]);
-                } elseif (strtolower($testRoute[$x]) != strtolower($this->parameters[$x])) {
-                    break 2;
-                }
-            }
-            $variables['headers'] = apache_request_headers();
-            $loadController = '\\Controlers\\' . $route->controller . 'Controller';
-            if ($route->method !== null) {
-                $controller = new $loadController($this->Core);
-                $arguments[] = $variables;
-                $arguments[] = $this->body;
-                call_user_func_array([$controller, $route->method], $arguments);
-            } else {
-                new $loadController($this->Core, $variables);
-            }
-            return;
-        }
-        header('Location: ' . $this->default);
-        exit;
     }
 
     /**
@@ -171,6 +106,48 @@ class Router
     }
 
     /**
+     * Check the routes and execute the correct controller
+     *
+     * @return void
+     */
+    private function execute(): void
+    {
+        $this->checkFunctions();
+        if ($this->parameters[0] === 'OPTIONS') {
+            $this->respondOnOptionsRequest(200);
+        }
+        $variables = [];
+        foreach($this->routes as $route) {
+            $testRoute = explode('/', $route->path);
+            $testRoute[0] = $route->request;
+            if (!(count($this->parameters) == count($testRoute))) {
+                continue;
+            }
+            for ($x = 0; $x < count($testRoute); $x++) {
+                if ($this->isItAVariable($testRoute[$x])) {
+                    $key = trim($testRoute[$x], '{}');
+                    $variables[$key] = str_replace('__', '/', $this->parameters[$x]);
+                } elseif (strtolower($testRoute[$x]) != strtolower($this->parameters[$x])) {
+                    break 2;
+                }
+            }
+            $variables['headers'] = apache_request_headers();
+            $loadController = '\\Controlers\\' . $route->controller;
+            if ($route->method !== null) {
+                $controller = new $loadController($this->Core);
+                $arguments[] = $variables;
+                $arguments[] = $this->body;
+                call_user_func_array([$controller, $route->method], $arguments);
+            } else {
+                new $loadController($this->Core, $variables);
+            }
+            return;
+        }
+        header('Location: ' . $this->default);
+        exit;
+    }
+
+    /**
      * function isItAVariable($input)
      * Checks if this part of the route is a variable
      *
@@ -180,6 +157,29 @@ class Router
     private function isItAVariable(string $input): bool
     {
         return preg_match("/^{(.+)}$/", $input);
+    }
+
+    /**
+     * function processURL()
+     * This will process the URL and extract the parameters from it.
+     */
+    private function processURL(): void
+    {
+        $defaultPath = '';
+        $basePath = explode('?', urldecode($_SERVER['REQUEST_URI']));
+        $requestURI = explode('/', rtrim($basePath[0], '/'));
+        $requestURI[0] = strtoupper($_SERVER['REQUEST_METHOD']);
+        $scriptName = explode('/', $_SERVER['SCRIPT_NAME']);
+        $sizeofRequestURI = sizeof($requestURI);
+        $sizeofScriptName = sizeof($scriptName);
+        for ($x = 0; $x < $sizeofRequestURI && $x < $sizeofScriptName; $x++) {
+            if (strtolower($requestURI[$x]) == strtolower($scriptName[$x])) {
+                $defaultPath .= '/' . $requestURI[$x];
+                unset($requestURI[$x]);
+            }
+        }
+        $this->default = $defaultPath . $this->default;
+        $this->parameters = array_values($requestURI);
     }
 
     /**
