@@ -70,6 +70,9 @@ class Router
 
         $this->Core = $Core;
         $this->routes = $this->Core->Routes->routes;
+        if (isset($this->Core->Routes->defaultRoute)) {
+            $this->default = $this->Core->Routes->defaultRoute;
+        }
         $this->body = file_get_contents('php://input');
 
         $this->processURL();
