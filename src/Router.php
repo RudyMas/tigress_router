@@ -124,6 +124,8 @@ class Router
             $testRoute = explode('/', $route->path);
             $testRoute[0] = $route->request;
 
+            if (empty($testRoute[1])) unset($testRoute[1]);
+
             if (!(count($this->parameters) == count($testRoute))) {
                 continue;
             }
