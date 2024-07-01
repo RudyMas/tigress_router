@@ -120,17 +120,20 @@ class Router
         foreach($this->routes as $route) {
             $testRoute = explode('/', $route->path);
             $testRoute[0] = $route->request;
+
             if (!(count($this->parameters) == count($testRoute))) {
                 continue;
             }
+
             for ($x = 0; $x < count($testRoute); $x++) {
                 if ($this->isItAVariable($testRoute[$x])) {
                     $key = trim($testRoute[$x], '{}');
                     $variables[$key] = str_replace('__', '/', $this->parameters[$x]);
                 } elseif (strtolower($testRoute[$x]) != strtolower($this->parameters[$x])) {
-                    break 2;
+                    continue 2;
                 }
             }
+
             $variables['headers'] = apache_request_headers();
             $loadController = '\\Controller\\' . $route->controller;
             if ($route->method !== null) {
