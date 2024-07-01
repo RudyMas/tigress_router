@@ -132,7 +132,7 @@ class Router
                 }
             }
             $variables['headers'] = apache_request_headers();
-            $loadController = '\\Controler\\' . $route->controller;
+            $loadController = '\\Controller\\' . $route->controller;
             if ($route->method !== null) {
                 $controller = new $loadController($this->Core);
                 $arguments[] = $variables;
