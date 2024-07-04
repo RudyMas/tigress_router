@@ -60,14 +60,22 @@ class Router
     private Core $Core;
 
     /**
+     * Get the version of the Router
+     *
+     * @return string
+     */
+    public static function version(): string
+    {
+        return '1.0.0';
+    }
+
+    /**
      * Router constructor.
      *
      * @param Core $Core
      */
     public function __construct(Core $Core)
     {
-        define('TIGRESS_ROUTER_VERSION', '1.0.0');
-
         $this->Core = $Core;
         $this->routes = $this->Core->Routes->routes;
         if (isset($this->Core->Routes->defaultRoute)) {
