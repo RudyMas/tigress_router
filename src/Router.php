@@ -10,7 +10,7 @@ use JetBrains\PhpStorm\NoReturn;
  * @author      Rudy Mas <rudy.mas@rudymas.be>
  * @copyright   2024, Rudy Mas (http://rudymas.be/)
  * @license     https://opensource.org/licenses/GPL-3.0 GNU General Public License, version 3 (GPL-3.0)
- * @version     1.1.0
+ * @version     1.1.1
  * @package     Tigress
  */
 class Router
@@ -65,7 +65,7 @@ class Router
      */
     public static function version(): string
     {
-        return '1.1.0';
+        return '1.1.1';
     }
 
     /**
@@ -92,40 +92,11 @@ class Router
     }
 
     /**
-     * Checks if a certain function exists on the server, or not.
-     * I needed to add this, because else the router wouldn't work on a NGINX server!
-     */
-    private function checkFunctions(): void
-    {
-        if (!function_exists('apache_request_headers')) {
-            function apache_request_headers(): array
-            {
-                $arh = [];
-                $rx_http = '/\AHTTP_/';
-                foreach ($_SERVER as $key => $val) {
-                    if (preg_match($rx_http, $key)) {
-                        $arh_key = preg_replace($rx_http, '', $key);
-                        $rx_matches = explode('_', $arh_key);
-                        if (count($rx_matches) > 0 and strlen($arh_key) > 2) {
-                            foreach ($rx_matches as $ak_key => $ak_val) {
-                                $rx_matches[$ak_key] = ucfirst($ak_val);
-                            }
-                            $arh_key = implode('-', $rx_matches);
-                        }
-                        $arh[$arh_key] = $val;
-                    }
-                }
-                return ($arh);
-            }
-        }
-    }
-
-    /**
      * Check the routes and execute the correct controller
      *
      * @return void
      */
-    private function execute(): void
+    public function execute(): void
     {
         $this->processURL();
         $this->checkFunctions();
@@ -166,6 +137,35 @@ class Router
         }
         header('Location: ' . $this->default);
         exit;
+    }
+
+    /**
+     * Checks if a certain function exists on the server, or not.
+     * I needed to add this, because else the router wouldn't work on a NGINX server!
+     */
+    private function checkFunctions(): void
+    {
+        if (!function_exists('apache_request_headers')) {
+            function apache_request_headers(): array
+            {
+                $arh = [];
+                $rx_http = '/\AHTTP_/';
+                foreach ($_SERVER as $key => $val) {
+                    if (preg_match($rx_http, $key)) {
+                        $arh_key = preg_replace($rx_http, '', $key);
+                        $rx_matches = explode('_', $arh_key);
+                        if (count($rx_matches) > 0 and strlen($arh_key) > 2) {
+                            foreach ($rx_matches as $ak_key => $ak_val) {
+                                $rx_matches[$ak_key] = ucfirst($ak_val);
+                            }
+                            $arh_key = implode('-', $rx_matches);
+                        }
+                        $arh[$arh_key] = $val;
+                    }
+                }
+                return ($arh);
+            }
+        }
     }
 
     /**
