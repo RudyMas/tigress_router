@@ -6,12 +6,11 @@ use JetBrains\PhpStorm\NoReturn;
 
 /**
  * Class Router (PHP version 8.3)
- * Build upon EasyRouter (rudymas/easyrouter)
  *
  * @author      Rudy Mas <rudy.mas@rudymas.be>
  * @copyright   2024, Rudy Mas (http://rudymas.be/)
  * @license     https://opensource.org/licenses/GPL-3.0 GNU General Public License, version 3 (GPL-3.0)
- * @version     1.0.0
+ * @version     1.1.0
  * @package     Tigress
  */
 class Router
@@ -66,7 +65,7 @@ class Router
      */
     public static function version(): string
     {
-        return '1.0.0';
+        return '1.1.0';
     }
 
     /**
@@ -78,13 +77,18 @@ class Router
     {
         $this->Core = $Core;
         $this->routes = $this->Core->Routes->routes;
+        if (isset($this->Core->Routes->extraRoutes)) {
+            foreach ($this->Core->Routes->extraRoutes as $file) {
+                if (!file_exists('/vendor/' . $file->package . '/config/routes.json')) {
+                    $externalRoutes = json_decode(file_get_contents('/vendor/' . $file->package . '/config/routes.json'));
+                    $this->routes = array_merge($this->routes, $externalRoutes->routes);
+                };
+            }
+        }
         if (isset($this->Core->Routes->defaultRoute)) {
             $this->default = $this->Core->Routes->defaultRoute;
         }
         $this->body = file_get_contents('php://input');
-
-        $this->processURL();
-        $this->execute();
     }
 
     /**
@@ -123,6 +127,7 @@ class Router
      */
     private function execute(): void
     {
+        $this->processURL();
         $this->checkFunctions();
         if ($this->parameters[0] === 'OPTIONS') {
             $this->respondOnOptionsRequest(200);
