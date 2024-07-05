@@ -7,11 +7,12 @@ use JetBrains\PhpStorm\NoReturn;
 /**
  * Class Router (PHP version 8.3)
  *
- * @author      Rudy Mas <rudy.mas@rudymas.be>
- * @copyright   2024, Rudy Mas (http://rudymas.be/)
- * @license     https://opensource.org/licenses/GPL-3.0 GNU General Public License, version 3 (GPL-3.0)
- * @version     1.1.1
- * @package     Tigress
+ * @author       Rudy Mas <rudy.mas@rudymas.be>
+ * @copyright    2024, Rudy Mas (http://rudymas.be/)
+ * @license      https://opensource.org/licenses/GPL-3.0 GNU General Public License, version 3 (GPL-3.0)
+ * @version      1.1.2
+ * @lastmodified 2024-07-05
+ * @package      Tigress
  */
 class Router
 {
@@ -65,7 +66,7 @@ class Router
      */
     public static function version(): string
     {
-        return '1.1.1';
+        return 'v1.1.2';
     }
 
     /**
@@ -79,8 +80,8 @@ class Router
         $this->routes = $this->Core->Routes->routes;
         if (isset($this->Core->Routes->extraRoutes)) {
             foreach ($this->Core->Routes->extraRoutes as $file) {
-                if (!file_exists('/vendor/' . $file->package . '/config/routes.json')) {
-                    $externalRoutes = json_decode(file_get_contents('/vendor/' . $file->package . '/config/routes.json'));
+                if (file_exists(SYSTEM_ROOT . '/vendor/' . $file->package . '/config/routes.json')) {
+                    $externalRoutes = json_decode(file_get_contents(SYSTEM_ROOT . '/vendor/' . $file->package . '/config/routes.json'));
                     $this->routes = array_merge($this->routes, $externalRoutes->routes);
                 };
             }
@@ -104,7 +105,7 @@ class Router
             $this->respondOnOptionsRequest(200);
         }
         $variables = [];
-        foreach($this->routes as $route) {
+        foreach ($this->routes as $route) {
             $testRoute = explode('/', $route->path);
             $testRoute[0] = $route->request;
 
