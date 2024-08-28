@@ -10,8 +10,8 @@ use JetBrains\PhpStorm\NoReturn;
  * @author       Rudy Mas <rudy.mas@rudymas.be>
  * @copyright    2024, Rudy Mas (http://rudymas.be/)
  * @license      https://opensource.org/licenses/GPL-3.0 GNU General Public License, version 3 (GPL-3.0)
- * @version      1.1.2
- * @lastmodified 2024-07-05
+ * @version      1.1.3
+ * @lastmodified 2024-08-28
  * @package      Tigress
  */
 class Router
@@ -66,7 +66,7 @@ class Router
      */
     public static function version(): string
     {
-        return 'v1.1.2';
+        return '1.1.3';
     }
 
     /**
