@@ -10,8 +10,8 @@ use JetBrains\PhpStorm\NoReturn;
  * @author       Rudy Mas <rudy.mas@rudymas.be>
  * @copyright    2024, Rudy Mas (http://rudymas.be/)
  * @license      https://opensource.org/licenses/GPL-3.0 GNU General Public License, version 3 (GPL-3.0)
- * @version      1.1.3
- * @lastmodified 2024-08-28
+ * @version      1.1.4
+ * @lastmodified 2024-09-06
  * @package      Tigress
  */
 class Router
@@ -66,7 +66,7 @@ class Router
      */
     public static function version(): string
     {
-        return '1.1.3';
+        return '1.1.4';
     }
 
     /**
@@ -77,17 +77,17 @@ class Router
     public function __construct(Core $Core)
     {
         $this->Core = $Core;
-        $this->routes = $this->Core->Routes->routes;
-        if (isset($this->Core->Routes->extraRoutes)) {
-            foreach ($this->Core->Routes->extraRoutes as $file) {
+        $this->routes = ROUTES->routes;
+        if (isset(ROUTES->extraRoutes)) {
+            foreach (ROUTES->extraRoutes as $file) {
                 if (file_exists(SYSTEM_ROOT . '/vendor/' . $file->package . '/config/routes.json')) {
                     $externalRoutes = json_decode(file_get_contents(SYSTEM_ROOT . '/vendor/' . $file->package . '/config/routes.json'));
                     $this->routes = array_merge($this->routes, $externalRoutes->routes);
                 };
             }
         }
-        if (isset($this->Core->Routes->defaultRoute)) {
-            $this->default = $this->Core->Routes->defaultRoute;
+        if (isset(ROUTES->defaultRoute)) {
+            $this->default = ROUTES->defaultRoute;
         }
         $this->body = file_get_contents('php://input');
     }
