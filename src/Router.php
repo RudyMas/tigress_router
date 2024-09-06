@@ -10,7 +10,7 @@ use JetBrains\PhpStorm\NoReturn;
  * @author       Rudy Mas <rudy.mas@rudymas.be>
  * @copyright    2024, Rudy Mas (http://rudymas.be/)
  * @license      https://opensource.org/licenses/GPL-3.0 GNU General Public License, version 3 (GPL-3.0)
- * @version      1.1.4
+ * @version      1.2.0
  * @lastmodified 2024-09-06
  * @package      Tigress
  */
@@ -54,29 +54,20 @@ class Router
     private array $routes = [];
 
     /**
-     * @var Core $Core
-     * Needed for injecting Tigress_Core into Framework
-     */
-    private Core $Core;
-
-    /**
      * Get the version of the Router
      *
      * @return string
      */
     public static function version(): string
     {
-        return '1.1.4';
+        return '1.2.0';
     }
 
     /**
      * Router constructor.
-     *
-     * @param Core $Core
      */
-    public function __construct(Core $Core)
+    public function __construct()
     {
-        $this->Core = $Core;
         $this->routes = ROUTES->routes;
         if (isset(ROUTES->extraRoutes)) {
             foreach (ROUTES->extraRoutes as $file) {
@@ -127,12 +118,12 @@ class Router
             $variables['headers'] = apache_request_headers();
             $loadController = '\\Controller\\' . $route->controller;
             if ($route->method !== null) {
-                $controller = new $loadController($this->Core);
+                $controller = new $loadController();
                 $arguments[] = $variables;
                 $arguments[] = $this->body;
                 call_user_func_array([$controller, $route->method], $arguments);
             } else {
-                new $loadController($this->Core, $variables);
+                new $loadController($variables);
             }
             return;
         }
