@@ -2,6 +2,7 @@
 
 namespace Tigress;
 
+use Exception;
 use JetBrains\PhpStorm\NoReturn;
 
 /**
@@ -10,8 +11,8 @@ use JetBrains\PhpStorm\NoReturn;
  * @author       Rudy Mas <rudy.mas@rudymas.be>
  * @copyright    2024, Rudy Mas (http://rudymas.be/)
  * @license      https://opensource.org/licenses/GPL-3.0 GNU General Public License, version 3 (GPL-3.0)
- * @version      1.2.0
- * @lastmodified 2024-09-06
+ * @version      1.2.1
+ * @lastmodified 2024-09-10
  * @package      Tigress
  */
 class Router
@@ -60,7 +61,7 @@ class Router
      */
     public static function version(): string
     {
-        return '1.2.0';
+        return '1.2.1';
     }
 
     /**
@@ -68,7 +69,7 @@ class Router
      */
     public function __construct()
     {
-        $this->routes = ROUTES->routes;
+        $this->routes = ROUTES->routes ?? throw new Exception('router.json has errors!');
         if (isset(ROUTES->extraRoutes)) {
             foreach (ROUTES->extraRoutes as $file) {
                 if (file_exists(SYSTEM_ROOT . '/vendor/' . $file->package . '/config/routes.json')) {
@@ -117,7 +118,7 @@ class Router
 
             $variables['headers'] = apache_request_headers();
             $loadController = '\\Controller\\' . $route->controller;
-            if ($route->method !== null) {
+            if (isset($route->method)) {
                 $controller = new $loadController();
                 $arguments[] = $variables;
                 $arguments[] = $this->body;
