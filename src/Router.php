@@ -2,7 +2,6 @@
 
 namespace Tigress;
 
-use Exception;
 use JetBrains\PhpStorm\NoReturn;
 
 /**
@@ -11,8 +10,8 @@ use JetBrains\PhpStorm\NoReturn;
  * @author       Rudy Mas <rudy.mas@rudymas.be>
  * @copyright    2024, Rudy Mas (http://rudymas.be/)
  * @license      https://opensource.org/licenses/GPL-3.0 GNU General Public License, version 3 (GPL-3.0)
- * @version      1.2.1
- * @lastmodified 2024-09-10
+ * @version      1.2.2
+ * @lastmodified 2024-11-14
  * @package      Tigress
  */
 class Router
@@ -61,7 +60,7 @@ class Router
      */
     public static function version(): string
     {
-        return '1.2.1';
+        return '1.2.2';
     }
 
     /**
@@ -69,19 +68,31 @@ class Router
      */
     public function __construct()
     {
-        $this->routes = ROUTES->routes ?? throw new Exception('router.json has errors!');
-        if (isset(ROUTES->extraRoutes)) {
-            foreach (ROUTES->extraRoutes as $file) {
+        $this->body = file_get_contents('php://input');
+    }
+
+    /**
+     * This function will create the routes from the routes.json file(s)
+     *
+     * @return array
+     */
+    public function createRoutes(): array
+    {
+        $router = json_decode(file_get_contents('config/routes.json'));
+        $this->routes = $router->routes;
+        if (isset($router->extraRoutes)) {
+            foreach ($router->extraRoutes as $file) {
                 if (file_exists(SYSTEM_ROOT . '/vendor/' . $file->package . '/config/routes.json')) {
                     $externalRoutes = json_decode(file_get_contents(SYSTEM_ROOT . '/vendor/' . $file->package . '/config/routes.json'));
                     $this->routes = array_merge($this->routes, $externalRoutes->routes);
                 };
             }
         }
-        if (isset(ROUTES->defaultRoute)) {
-            $this->default = ROUTES->defaultRoute;
+        if (isset($router->defaultRoute)) {
+            $this->default = $router->defaultRoute;
         }
-        $this->body = file_get_contents('php://input');
+
+        return $this->routes;
     }
 
     /**
