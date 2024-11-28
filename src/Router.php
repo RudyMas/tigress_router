@@ -5,13 +5,12 @@ namespace Tigress;
 use JetBrains\PhpStorm\NoReturn;
 
 /**
- * Class Router (PHP version 8.3)
+ * Class Router (PHP version 8.4)
  *
  * @author       Rudy Mas <rudy.mas@rudymas.be>
  * @copyright    2024, Rudy Mas (http://rudymas.be/)
  * @license      https://opensource.org/licenses/GPL-3.0 GNU General Public License, version 3 (GPL-3.0)
- * @version      1.2.2
- * @lastmodified 2024-11-14
+ * @version      2024.11.28.0
  * @package      Tigress
  */
 class Router
@@ -60,7 +59,7 @@ class Router
      */
     public static function version(): string
     {
-        return '1.2.2';
+        return '2024.11.28';
     }
 
     /**
