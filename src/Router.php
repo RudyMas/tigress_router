@@ -10,7 +10,7 @@ use JetBrains\PhpStorm\NoReturn;
  * @author       Rudy Mas <rudy.mas@rudymas.be>
  * @copyright    2024, Rudy Mas (http://rudymas.be/)
  * @license      https://opensource.org/licenses/GPL-3.0 GNU General Public License, version 3 (GPL-3.0)
- * @version      2024.11.28.0
+ * @version      2025.03.03.0
  * @package      Tigress
  */
 class Router
@@ -59,7 +59,7 @@ class Router
      */
     public static function version(): string
     {
-        return '2024.11.28';
+        return '2025.03.03';
     }
 
     /**
@@ -140,6 +140,24 @@ class Router
         }
         header('Location: ' . $this->default);
         exit;
+    }
+
+    /**
+     * Get the request URI
+     * This will return the request URI without the query string
+     * Example: http://www.test.be/user/5?name=John
+     * Will return: /user/5
+     *
+     * @return string
+     */
+    public function getRequestUri(): string
+    {
+        $path = $_SERVER['REQUEST_URI'];
+        $path = explode('?', $path)[0];
+        if (strlen($path) > 1) {
+            $path = rtrim($path, '/');
+        }
+        return $path;
     }
 
     /**
