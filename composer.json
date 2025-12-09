@@ -13,10 +13,7 @@
   ],
   "minimum-stability": "stable",
   "require": {
-    "php": ">=8.4"
-  },
-  "require-dev": {
-    "tigress/core": "dev-main"
+    "php": ">=8.5"
   },
   "autoload": {
     "psr-4": {
