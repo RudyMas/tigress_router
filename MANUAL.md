@@ -221,23 +221,3 @@ Returns the request URI with query string and trailing slash removed.
 ### NGINX / Other
 
 The router defines a polyfill for `apache_request_headers()` that reads headers from `$_SERVER`. This is done automatically inside `execute()`.
-
----
-
-## Code Review Notes
-
-The following observations were made during the code review of `src/Router.php`:
-
-1. **`$arguments` variable scope** (line 133): `$arguments[] = $variables;` relies on PHP's auto-creation of arrays on first append. This works but is implicit — consider an explicit `$arguments = [$variables, $this->body];` assignment.
-
-2. **Default route mutation**: `$this->default` is modified in both `createRoutes()` (from config) and `processURL()` (prepended with script path). If `createRoutes()` is called after `execute()` has already run `processURL()`, the default could be inconsistent. In normal usage the flow is: call `createRoutes()` once, then `execute()`, so this is safe but fragile.
-
-3. **`#[NoReturn]` attribute**: The `respondOnOptionsRequest()` method uses JetBrains PhpStorm's `#[NoReturn]` attribute. This is not a PHP built-in — it will be silently ignored if the `jetbrains/phpstorm-attributes` package is not installed, but may cause confusion. Consider removing or conditionally importing it.
-
-4. **Hardcoded version**: The `version()` method returns a hardcoded string matching the `@version` docblock. This should be kept in sync manually.
-
-5. **`SYSTEM_ROOT` constant** (line 84): The code references a `SYSTEM_ROOT` constant that is not defined in this package. It must be defined elsewhere in the Tigress framework (expected to be the project root path).
-
-6. **No input validation on routes JSON**: The `createRoutes()` method does not validate the structure of the decoded JSON. Malformed route definitions (e.g., missing `controller` or `path`) will cause runtime errors during `execute()`.
-
-7. **PHP 8.5 requirement**: The `composer.json` requires `php >= 8.5`, which is a future version. If you are running this on an earlier PHP version, adjust the constraint accordingly.
