@@ -8,9 +8,9 @@ use JetBrains\PhpStorm\NoReturn;
  * Class Router (PHP version 8.5)
  *
  * @author       Rudy Mas <rudy.mas@rudymas.be>
- * @copyright    2024, Rudy Mas (http://rudymas.be/)
+ * @copyright    2024-2026, Rudy Mas (http://rudymas.be/)
  * @license      https://opensource.org/licenses/GPL-3.0 GNU General Public License, version 3 (GPL-3.0)
- * @version      2025.12.09.1
+ * @version      2026.09.03.0
  * @package      Tigress
  */
 class Router
@@ -59,7 +59,7 @@ class Router
      */
     public static function version(): string
     {
-        return '2025.12.09';
+        return '2026.09.03';
     }
 
     /**
@@ -235,5 +235,15 @@ class Router
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Headers: *');
         exit;
+    }
+
+    /**
+     * Return the routes array
+     *
+     * @return array
+     */
+    public function getRoutes(): array
+    {
+        return $this->routes;
     }
 }

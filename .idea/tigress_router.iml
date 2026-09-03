@@ -6,6 +6,33 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" packagePrefix="Tigress\" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/dompdf/dompdf" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/dompdf/php-font-lib" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/dompdf/php-svg-lib" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/masterminds/html5" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/paragonie/constant_time_encoding" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/phpseclib/phpseclib" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/sabberworm/php-css-parser" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/shuchkin/simplexlsxgen" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/deprecation-contracts" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/intl" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-ctype" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-mbstring" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php82" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/thecodingmachine/safe" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/tigress/core" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/tigress/data-converter" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/tigress/data-files" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/tigress/database" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/tigress/encryption" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/tigress/file-manager" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/tigress/menu" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/tigress/model" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/tigress/repository" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/tigress/rights" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/tigress/security" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/twig/intl-extra" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/twig/twig" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -13,6 +13,33 @@
   <component name="PhpIncludePathManager">
     <include_path>
       <path value="$PROJECT_DIR$/vendor/composer" />
+      <path value="$PROJECT_DIR$/vendor/twig/intl-extra" />
+      <path value="$PROJECT_DIR$/vendor/paragonie/constant_time_encoding" />
+      <path value="$PROJECT_DIR$/vendor/dompdf/php-svg-lib" />
+      <path value="$PROJECT_DIR$/vendor/dompdf/php-font-lib" />
+      <path value="$PROJECT_DIR$/vendor/masterminds/html5" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php82" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-mbstring" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-ctype" />
+      <path value="$PROJECT_DIR$/vendor/symfony/intl" />
+      <path value="$PROJECT_DIR$/vendor/symfony/deprecation-contracts" />
+      <path value="$PROJECT_DIR$/vendor/thecodingmachine/safe" />
+      <path value="$PROJECT_DIR$/vendor/twig/twig" />
+      <path value="$PROJECT_DIR$/vendor/sabberworm/php-css-parser" />
+      <path value="$PROJECT_DIR$/vendor/tigress/security" />
+      <path value="$PROJECT_DIR$/vendor/tigress/rights" />
+      <path value="$PROJECT_DIR$/vendor/tigress/repository" />
+      <path value="$PROJECT_DIR$/vendor/tigress/model" />
+      <path value="$PROJECT_DIR$/vendor/tigress/data-files" />
+      <path value="$PROJECT_DIR$/vendor/tigress/menu" />
+      <path value="$PROJECT_DIR$/vendor/tigress/file-manager" />
+      <path value="$PROJECT_DIR$/vendor/tigress/data-converter" />
+      <path value="$PROJECT_DIR$/vendor/tigress/database" />
+      <path value="$PROJECT_DIR$/vendor/tigress/encryption" />
+      <path value="$PROJECT_DIR$/vendor/phpseclib/phpseclib" />
+      <path value="$PROJECT_DIR$/vendor/shuchkin/simplexlsxgen" />
+      <path value="$PROJECT_DIR$/vendor/dompdf/dompdf" />
+      <path value="$PROJECT_DIR$/vendor/tigress/core" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.5" />
