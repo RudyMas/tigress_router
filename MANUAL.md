@@ -1,6 +1,6 @@
 # Tigress Router — Programmer's Manual
 
-**Version:** 2025.12.09 | **Package:** `tigress/router` | **PHP:** >= 8.5 | **License:** GPL-3.0
+**Version:** 2025.12.09 | **Package:** `tigress/router` | **PHP:** >= 8.5 | **License:** Apache 2.0
 
 ---
 
